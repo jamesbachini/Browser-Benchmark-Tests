@@ -130,10 +130,6 @@
 
         function updateCurrentPerformanceChart(data) {
             const canvas = document.getElementById('currentPerformanceChart');
-            if (!canvas) {
-                console.error('Current Performance Chart canvas not found');
-                return;
-            }
             const ctx = canvas.getContext('2d');
             
             if (currentPerformanceChart) {
@@ -167,9 +163,8 @@
         function runSpeedTest() {
             return new Promise((resolve) => {
                 const startTime = performance.now();
-                const testSize = 10 * 1024 * 1024; // 10 MB of data
+                const testSize = 10 * 1024 * 1024;
                 const testData = new ArrayBuffer(testSize);
-
                 const view = new Uint8Array(testData);
                 for (let i = 0; i < testSize; i++) {
                     view[i] = Math.floor(Math.random() * 256);
@@ -178,15 +173,15 @@
                 const blob = new Blob([testData]);
                 const reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function() {
                     const endTime = performance.now();
                     const durationInSeconds = (endTime - startTime) / 1000;
                     const speedMBps = (testSize / (1024 * 1024) / durationInSeconds).toFixed(2);
                     resolve(parseFloat(speedMBps));
                 };
 
-                reader.onerror = function(e) {
-                    console.error('Speed test error:', e);
+                reader.onerror = function() {
+                    console.error('Speed test error');
                     resolve(0);
                 };
 
@@ -196,19 +191,11 @@
 
         function updateSpeedTestResult(speed) {
             const result = document.getElementById('speedTestResult');
-            if (result) {
-                result.textContent = `Processing speed: ${speed.toFixed(2)} MB/s`;
-            } else {
-                console.error('Speed Test Result element not found');
-            }
+            result.textContent = `Processing speed: ${speed.toFixed(2)} MB/s`;
         }
 
         function updatePerformanceOverTimeChart() {
             const canvas = document.getElementById('performanceOverTimeChart');
-            if (!canvas) {
-                console.error('Performance Over Time Chart canvas not found');
-                return;
-            }
             const ctx = canvas.getContext('2d');
             
             if (performanceOverTimeChart) {
@@ -261,10 +248,9 @@
             updatePerformanceOverTimeChart();
         }
 
-        // Wait for the DOM to be fully loaded before initializing
         document.addEventListener('DOMContentLoaded', function() {
             updateDashboard();
-            setInterval(updateDashboard, 5000); // Update every 5 seconds
+            setInterval(updateDashboard, 5000);
         });
     </script>
 </body>
